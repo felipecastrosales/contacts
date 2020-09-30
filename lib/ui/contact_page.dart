@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'dart:async';
-import 'package:agenda_de_dados/helpers/contact_helder.dart';
+import 'package:agenda_de_dados/helpers/contact_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -80,8 +80,8 @@ class _ContactPageState extends State<ContactPage> {
                       ),
                     ),
                   ),
-                  onTap: (){
-                    ImagePicker.pickImage(source: ImageSource.gallery).then((file) {
+                  onTap: () async {
+                    await ImagePicker().getImage(source: ImageSource.gallery).then((file) {
                       if(file == null) return;
                       setState(() {
                         _editedContact.img = file.path;

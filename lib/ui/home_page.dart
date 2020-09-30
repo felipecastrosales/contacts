@@ -1,10 +1,11 @@
-import 'dart:io';
-import 'package:agenda_de_dados/helpers/contact_helder.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:agenda_de_dados/helpers/contact_helper.dart';
+import 'package:agenda_de_dados/ui/contact_page.dart';
 import 'contact_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-enum OrderOptions {orderaz, orderza}
+enum OrderOptions { orderaz, orderza }
 
 class HomePage extends StatefulWidget {
   @override
@@ -12,6 +13,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
   ContactHelper helper = ContactHelper();
 
   List<Contact> contacts = List();
@@ -36,12 +38,12 @@ class _HomePageState extends State<HomePage> {
                 child: Text("Ordenar de A-Z"),
                 value: OrderOptions.orderaz,
               ),
-                const PopupMenuItem<OrderOptions>(
+              const PopupMenuItem<OrderOptions>(
                 child: Text("Ordenar de Z-A"),
                 value: OrderOptions.orderza,
-                ),
+              ),
             ],
-    onSelected: _orderList,
+            onSelected: _orderList,
           ),
         ],
       ),
@@ -75,10 +77,10 @@ class _HomePageState extends State<HomePage> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   image: DecorationImage(
-                      image: contacts[index].img != null
-                          ? FileImage(File(contacts[index].img)) :
-                      AssetImage("images/person.png"),
-                      fit: BoxFit.cover,
+                    image: contacts[index].img != null
+                        ? FileImage(File(contacts[index].img))
+                        : AssetImage("images/person.png"),
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
@@ -183,7 +185,7 @@ class _HomePageState extends State<HomePage> {
                 )));
     if (recContact != null) {
       if (contact != null) {
-        await helper.uptadeContact(recContact);
+        await helper.updateContact(recContact);
       } else {
         await helper.saveContact(recContact);
       }
@@ -199,8 +201,8 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void _orderList(OrderOptions result){
-    switch(result){
+  void _orderList(OrderOptions result) {
+    switch (result) {
       case OrderOptions.orderaz:
         contacts.sort((a, b) {
           return a.name.toLowerCase().compareTo(b.name.toLowerCase());
@@ -208,13 +210,10 @@ class _HomePageState extends State<HomePage> {
         break;
       case OrderOptions.orderza:
         contacts.sort((a, b) {
-            return b.name.toLowerCase().compareTo(a.name.toLowerCase());
-            });
+          return b.name.toLowerCase().compareTo(a.name.toLowerCase());
+        });
         break;
     }
-    setState(() {
-
-    });
+    setState(() {});
   }
-
 }
