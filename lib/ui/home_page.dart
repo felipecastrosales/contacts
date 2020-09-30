@@ -28,18 +28,18 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Contatos"),
+        title: Text('Contatos'),
         backgroundColor: Colors.red,
         centerTitle: true,
         actions: <Widget>[
           PopupMenuButton<OrderOptions>(
             itemBuilder: (context) => <PopupMenuEntry<OrderOptions>>[
               const PopupMenuItem<OrderOptions>(
-                child: Text("Ordenar de A-Z"),
+                child: Text('Ordenar de A-Z'),
                 value: OrderOptions.orderaz,
               ),
               const PopupMenuItem<OrderOptions>(
-                child: Text("Ordenar de Z-A"),
+                child: Text('Ordenar de Z-A'),
                 value: OrderOptions.orderza,
               ),
             ],
@@ -79,7 +79,7 @@ class _HomePageState extends State<HomePage> {
                   image: DecorationImage(
                     image: contacts[index].img != null
                         ? FileImage(File(contacts[index].img))
-                        : AssetImage("images/person.png"),
+                        : AssetImage('images/person.png'),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -90,16 +90,16 @@ class _HomePageState extends State<HomePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      contacts[index].name ?? "",
+                      contacts[index].name ?? '',
                       style: TextStyle(
                           fontSize: 22.0, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      contacts[index].email ?? "",
+                      contacts[index].email ?? '',
                       style: TextStyle(fontSize: 16.0),
                     ),
                     Text(
-                      contacts[index].phone ?? "",
+                      contacts[index].phone ?? '',
                       style: TextStyle(fontSize: 18.0),
                     ),
                   ],
@@ -131,11 +131,11 @@ class _HomePageState extends State<HomePage> {
                         padding: const EdgeInsets.all(10.0),
                         child: FlatButton(
                           child: Text(
-                            "Ligar",
+                            'Ligar',
                             style: TextStyle(color: Colors.red, fontSize: 20.0),
                           ),
                           onPressed: () {
-                            launch("tel: ${contacts[index].phone}");
+                            launch('tel: ${contacts[index].phone}');
                             Navigator.pop(context);
                           },
                         ),
@@ -144,7 +144,7 @@ class _HomePageState extends State<HomePage> {
                         padding: const EdgeInsets.all(10.0),
                         child: FlatButton(
                           child: Text(
-                            "Editar",
+                            'Editar',
                             style: TextStyle(color: Colors.red, fontSize: 20.0),
                           ),
                           onPressed: () {
@@ -157,7 +157,7 @@ class _HomePageState extends State<HomePage> {
                         padding: const EdgeInsets.all(10.0),
                         child: FlatButton(
                           child: Text(
-                            "Excluir",
+                            'Excluir',
                             style: TextStyle(color: Colors.red, fontSize: 20.0),
                           ),
                           onPressed: () {
