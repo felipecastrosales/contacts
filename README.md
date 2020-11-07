@@ -1,5 +1,5 @@
  <p align="center">
-      <img src="https://image.flaticon.com/icons/png/512/88/88271.png" width="80px" alt="Image FlatIcon"/>
+      <img src="https://image.flaticon.com/icons/png/512/88/88271.png" width="900px" alt="Image FlatIcon"/>
 </p>
 
 <h1 align="center">Contacts</h1>
@@ -8,7 +8,8 @@
    
 <p align="center">   
    A Contact Book made with Flutter. 💙<br>
-   A Contact Application, using <a href="https://pub.dev/packages/sqflite">sqflite</a>, where you can create, consult, edit and delete, you can also organize them from A-Z, or from Z-A, put photos (from gallery), and email in your contacts.
+   A Contact Application, using <a href="https://pub.dev/packages/sqflite">sqflite</a>, a packpage from Flutter. Where you can create, consult, edit and delete, also organize them from A-Z, or from Z-A, put photos (from gallery) and email in your contacts.<br>
+   This application is in version 1.2.
 </p>
 
 ---
@@ -16,7 +17,7 @@
 <h2 align="center">Preview 📱</h2><br>
 
    <p align="center">
-      <img src="assets/demos/contactsdemo1.gif">
+      <img src="assets/demos/contactsdemo1.gif" width="500">
    </p>
    
    > * See all in [`demo`](https://github.com/felipecastrosales/Contacts/tree/master/assets/demos) folder. 🧐📂
