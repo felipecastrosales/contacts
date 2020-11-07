@@ -1,5 +1,5 @@
  <p align="center">
-      <img src="https://image.flaticon.com/icons/png/512/88/88271.png" width="900px" alt="Image FlatIcon"/>
+      <img src="https://image.flaticon.com/icons/png/512/88/88271.png" width="90px" alt="Image FlatIcon"/>
 </p>
 
 <h1 align="center">Contacts</h1>
@@ -17,7 +17,7 @@
 <h2 align="center">Preview 📱</h2><br>
 
    <p align="center">
-      <img src="assets/demos/contactsdemo1.gif" width="500">
+      <img src="assets/demos/contactsdemo1.gif">
    </p>
    
    > * See all in [`demo`](https://github.com/felipecastrosales/Contacts/tree/master/assets/demos) folder. 🧐📂
