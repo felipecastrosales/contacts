@@ -4,6 +4,19 @@
 
 <h1 align="center">Contacts</h1>
 
+   <h2 align="center">Topics 📋</h2>
+
+   <p>
+   
+   - [About 📖](#about-)
+   - [Preview 📱](#preview-)
+   - [Challenges and Learnings along the way 🤯](#challenges-and-learnings-along-the-way-)
+   - [How to Use 🤔](#how-to-use-)
+   - [How to Contribute 💪](#how-to-contribute-)
+   - [License 📝](#license-)
+
+   </p>
+
 <h2 align="center">About 📖</h2>
    
 <p align="center">   
@@ -37,16 +50,33 @@
 
    ```   
    - Clone this repository:
-   $ git clone https://github.com/felipecastrosales/Contacts Contacts
+   $ git clone https://github.com/felipecastrosales/Contacts contacts
 
    - Enter in directory:
-   $ cd Contacts
+   $ cd contacts
 
    - For install dependencies:
    $ flutter packages get
 
    - Run the app: 
    $ flutter run
+   ```
+
+---
+
+<h2 align="center">How to Contribute 💪</h2>
+
+   ```
+   - Fork the project 
+
+   - Create a new branch with your changes:
+   $ git checkout -b my-feature
+
+   - Save your changes and create a commit message telling you what you did:
+   $ git commit -m "feature: My new feature"
+
+   - Submit your changes:
+   $ git push origin my-feature
    ```
 
 ---
