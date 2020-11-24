@@ -28,19 +28,15 @@ class ContactHelper {
   Future<Database> initDb() async {
     final databasesPath = await getDatabasesPath();
     final path = join(databasesPath, 'contactsnew.db');
-
     return await openDatabase(path, version: 1,
-        // ignore: avoid_types_on_closure_parameters
-        onCreate: (Database db, int newerVersion) async {
+        onCreate: (db, newerVersion) async {
       await db.execute(
-        'CREATE TABLE $contactTable'
-        '('
-          '$idColumn    INTEGER PRIMARY KEY, '
-          '$nameColumn  TEXT, '
-          '$emailColumn TEXT, '
-          '$phoneColumn TEXT, '
-          '$imgColumn   TEXT'
-        ')'
+        'CREATE TABLE $contactTable('
+          '$idColumn INTEGER PRIMARY KEY,'
+          '$nameColumn TEXT,'
+          '$emailColumn TEXT,'
+          '$phoneColumn TEXT,' 
+          '$imgColumn TEXT)'
       );
     });
   }
@@ -117,10 +113,10 @@ class Contact {
 
   Map toMap() {
     var map = <String, dynamic>{
-      nameColumn  : name,
-      emailColumn : email,
-      phoneColumn : phone,
-      imgColumn   : img
+      nameColumn: name,
+      emailColumn: email,
+      phoneColumn: phone,
+      imgColumn: img
     };
     if (id != null) {
       map[idColumn] = id;
@@ -130,13 +126,11 @@ class Contact {
 
   @override
   String toString() {
-    return 'Contact'
-    '('
-      'id:    $id,' 
-      'name:  $name,'
-      'email: $email,'
-      'phone: $phone,' 
-      'img:   $img'
-    ')';
+    return 'Contact('
+    'id: $id,' 
+    'name: $name, '
+    'email: $email, '
+    'phone: $phone, '
+    'img: $img)';
   }
 }

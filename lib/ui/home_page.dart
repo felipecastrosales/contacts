@@ -1,8 +1,6 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../helpers/contact_helper.dart';
 import 'contact_page.dart';
 
@@ -127,7 +125,8 @@ class _HomePageState extends State<HomePage> {
                     child: FlatButton(
                       child: Text(
                         'Ligar',
-                         style: TextStyle(color: Colors.red, fontSize: 20.0)),
+                        style: TextStyle(color: Colors.red, fontSize: 20.0),
+                      ),
                       onPressed: () {
                         launch('tel: ${contacts[index].phone}');
                         Navigator.pop(context);
@@ -166,15 +165,16 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             );
-          }
+          },
         );
-      }
+      },
     );
   }
 
   void _showContactPage({Contact contact}) async {
-    final recContact = await Navigator.push(context, MaterialPageRoute(
-      builder: (context) => ContactPage(contact: contact)));
+    final recContact = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ContactPage(contact: contact)));
     if (recContact != null) {
       if (contact != null) {
         await helper.updateContact(recContact);
