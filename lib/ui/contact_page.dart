@@ -1,8 +1,8 @@
-import 'dart:io';
 import 'dart:async';
-import 'package:agenda_de_dados/helpers/contact_helper.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import '../helpers/contact_helper.dart';
 
 class ContactPage extends StatefulWidget {
   final Contact contact;
@@ -28,8 +28,9 @@ class _ContactPageState extends State<ContactPage> {
     super.initState();
     if (widget.contact == null) {
       _editedContact = Contact();
-    } else
+    } else {
       _editedContact = Contact.fromMap(widget.contact.toMap());
+    }
 
     _nameController.text = _editedContact.name;
     _emailController.text = _editedContact.email;
