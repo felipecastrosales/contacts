@@ -12,11 +12,8 @@ final String imgColumn = 'imgColumn';
 class ContactHelper {
 
   static final ContactHelper _instance = ContactHelper.internal();
-
   factory ContactHelper() => _instance;
-
   ContactHelper.internal();
-
   Database _db;
 
   Future<Database> get db async {
@@ -53,9 +50,9 @@ class ContactHelper {
   Future<Contact> getContact(int id) async {
     var dbContact = await db;
     List<Map> maps = await dbContact.query(contactTable,
-        columns: [idColumn, nameColumn, emailColumn, phoneColumn, imgColumn],
-        where: '$idColumn = ?',
-        whereArgs: [id]);
+      columns: [idColumn, nameColumn, emailColumn, phoneColumn, imgColumn],
+      where: '$idColumn = ?',
+      whereArgs: [id]);
     if (maps.isNotEmpty) {
       return Contact.fromMap(maps.first);
     } else {
@@ -66,13 +63,13 @@ class ContactHelper {
   Future<int> deleteContact(int id) async {
     var dbContact = await db;
     return await dbContact
-        .delete(contactTable, where: '$idColumn = ?', whereArgs: [id]);
+      .delete(contactTable, where: '$idColumn = ?', whereArgs: [id]);
   }
 
   Future<int> updateContact(Contact contact) async {
     var dbContact = await db;
     return await dbContact.update(contactTable, contact.toMap(),
-        where: '$idColumn = ?', whereArgs: [contact.id]);
+      where: '$idColumn = ?', whereArgs: [contact.id]);
   }
 
   Future<List> getAllContacts() async {
@@ -88,7 +85,7 @@ class ContactHelper {
   Future<int> getNumber() async {
     var dbContact = await db;
     return Sqflite.firstIntValue(
-        await dbContact.rawQuery('SELECT COUNT(*) FROM $contactTable'));
+      await dbContact.rawQuery('SELECT COUNT(*) FROM $contactTable'));
   }
 
   Future close() async {
@@ -107,11 +104,11 @@ class Contact {
   Contact();
 
   Contact.fromMap(Map map) {
-    id = map[idColumn];
-    name = map[nameColumn];
+    id    = map[idColumn];
+    name  = map[nameColumn];
     email = map[emailColumn];
     phone = map[phoneColumn];
-    img = map[imgColumn];
+    img   = map[imgColumn];
   }
 
   Map toMap() {
