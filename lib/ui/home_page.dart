@@ -74,8 +74,8 @@ class _HomePageState extends State<HomePage> {
                   shape: BoxShape.circle,
                   image: DecorationImage(
                     image: contacts[index].img != null
-                        ? FileImage(File(contacts[index].img))
-                        : AssetImage('images/person.png'),
+                      ? FileImage(File(contacts[index].img))
+                      : AssetImage('assets/images/person.png'),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -88,16 +88,13 @@ class _HomePageState extends State<HomePage> {
                     Text(
                       contacts[index].name ?? '',
                       style: TextStyle(
-                          fontSize: 22.0, fontWeight: FontWeight.bold),
-                    ),
+                        fontSize: 22.0, fontWeight: FontWeight.bold)),
                     Text(
                       contacts[index].email ?? '',
-                      style: TextStyle(fontSize: 16.0),
-                    ),
+                      style: TextStyle(fontSize: 16.0)),
                     Text(
                       contacts[index].phone ?? '',
-                      style: TextStyle(fontSize: 18.0),
-                    ),
+                      style: TextStyle(fontSize: 18.0)),
                   ],
                 ),
               ),
