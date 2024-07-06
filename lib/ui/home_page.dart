@@ -7,8 +7,10 @@ import 'contact_page.dart';
 enum OrderOptions { orderaz, orderza }
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
-  _HomePageState createState() => _HomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
@@ -25,19 +27,25 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Contatos'),
+        title: const Text(
+          'Contatos',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
         backgroundColor: Colors.red,
         centerTitle: true,
         actions: <Widget>[
           PopupMenuButton<OrderOptions>(
+            iconColor: Colors.white,
             itemBuilder: (context) => <PopupMenuEntry<OrderOptions>>[
               const PopupMenuItem<OrderOptions>(
-                child: Text('Ordenar de A-Z'),
                 value: OrderOptions.orderaz,
+                child: Text('Ordenar de A-Z'),
               ),
               const PopupMenuItem<OrderOptions>(
-                child: Text('Ordenar de Z-A'),
                 value: OrderOptions.orderza,
+                child: Text('Ordenar de Z-A'),
               ),
             ],
             onSelected: _orderList,
@@ -49,13 +57,13 @@ class _HomePageState extends State<HomePage> {
         onPressed: () {
           _showContactPage();
         },
-        child: Icon(Icons.add),
         backgroundColor: Colors.red,
+        child: const Icon(Icons.add),
       ),
       body: ListView.builder(
-        padding: EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(10.0),
         itemCount: contacts.length,
-        itemBuilder: _contactCard
+        itemBuilder: _contactCard,
       ),
     );
   }
@@ -64,7 +72,7 @@ class _HomePageState extends State<HomePage> {
     return GestureDetector(
       child: Card(
         child: Padding(
-          padding: EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(10.0),
           child: Row(
             children: <Widget>[
               Container(
@@ -74,27 +82,32 @@ class _HomePageState extends State<HomePage> {
                   shape: BoxShape.circle,
                   image: DecorationImage(
                     image: contacts[index].img != null
-                      ? FileImage(File(contacts[index].img))
-                      : AssetImage('assets/images/person.png'),
+                        ? FileImage(File(contacts[index].img))
+                        : const AssetImage('assets/images/person.png'),
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(left: 10.0),
+                padding: const EdgeInsets.only(left: 10.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      contacts[index].name ?? '',
-                      style: TextStyle(
-                        fontSize: 22.0, fontWeight: FontWeight.bold)),
+                      contacts[index].name,
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     Text(
-                      contacts[index].email ?? '',
-                      style: TextStyle(fontSize: 16.0)),
+                      contacts[index].email,
+                      style: const TextStyle(fontSize: 16),
+                    ),
                     Text(
-                      contacts[index].phone ?? '',
-                      style: TextStyle(fontSize: 18.0)),
+                      contacts[index].phone,
+                      style: const TextStyle(fontSize: 18),
+                    ),
                   ],
                 ),
               ),
@@ -116,18 +129,19 @@ class _HomePageState extends State<HomePage> {
           onClosing: () {},
           builder: (context) {
             return Container(
-              padding: EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(10.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: TextButton(
-                      child: Text(
+                      child: const Text(
                         'Ligar',
                         style: TextStyle(color: Colors.red, fontSize: 20.0),
                       ),
                       onPressed: () {
+                        // launchUrl(Uri.encodeFull('tel: ${contacts[index].phone}'));
                         launch('tel: ${contacts[index].phone}');
                         Navigator.pop(context);
                       },
@@ -136,7 +150,7 @@ class _HomePageState extends State<HomePage> {
                   Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: TextButton(
-                      child: Text(
+                      child: const Text(
                         'Editar',
                         style: TextStyle(color: Colors.red, fontSize: 20.0),
                       ),
@@ -149,7 +163,7 @@ class _HomePageState extends State<HomePage> {
                   Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: TextButton(
-                      child: Text(
+                      child: const Text(
                         'Excluir',
                         style: TextStyle(color: Colors.red, fontSize: 20.0),
                       ),
@@ -171,16 +185,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _showContactPage({Contact contact}) async {
-    final recContact = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => ContactPage(contact: contact)));
+  void _showContactPage({
+    Contact? contact,
+  }) async {
+    final recContact = await Navigator.push(context,
+        MaterialPageRoute(builder: (context) => ContactPage(contact: contact)));
     if (recContact != null) {
-      if (contact != null) {
-        await helper.updateContact(recContact);
-      } else {
-        await helper.saveContact(recContact);
-      }
+      await helper.updateContact(recContact);
       _getAllContacts();
     }
   }
@@ -188,7 +199,7 @@ class _HomePageState extends State<HomePage> {
   void _getAllContacts() {
     helper.getAllContacts().then((list) {
       setState(() {
-        contacts = list;
+        contacts = list as List<Contact>;
       });
     });
   }
