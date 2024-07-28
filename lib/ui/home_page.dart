@@ -73,6 +73,9 @@ class _HomePageState extends State<HomePage> {
           final item = contacts[index];
 
           return GestureDetector(
+            onTap: () {
+              _showOptions(context, index);
+            },
             child: Card(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -119,9 +122,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            onTap: () {
-              _showOptions(context, index);
-            },
           );
         },
       ),
@@ -138,14 +138,14 @@ class _HomePageState extends State<HomePage> {
           onClosing: () {},
           builder: (context) {
             return Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(8.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   if (phone.isNotEmpty)
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
                       child: TextButton(
                         child: const Text(
                           'Ligar',
@@ -161,7 +161,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
                     child: TextButton(
                       child: const Text(
                         'Editar',
@@ -174,7 +174,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
                     child: TextButton(
                       child: const Text(
                         'Excluir',

@@ -9,7 +9,13 @@ void main() {
       home: const HomePage(),
       theme: ThemeData(
         primaryColor: Colors.red,
+        dialogBackgroundColor: Colors.white,
         colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.red),
+        textButtonTheme: TextButtonThemeData(
+          style: ButtonStyle(
+            overlayColor: WidgetStateProperty.all(const Color(0x22000000)),
+          ),
+        ),
       ),
     ),
   );
