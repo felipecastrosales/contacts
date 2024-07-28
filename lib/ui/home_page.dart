@@ -67,25 +67,28 @@ class _HomePageState extends State<HomePage> {
         child: const Icon(Icons.add),
       ),
       body: ListView.builder(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(8.0),
         itemCount: contacts.length,
         itemBuilder: (context, index) {
+          final item = contacts[index];
+
           return GestureDetector(
             child: Card(
               child: Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: <Widget>[
-                    Container(
-                      width: 80.0,
-                      height: 80.0,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                          image: contacts[index].img != null
-                              ? FileImage(File(contacts[index].img))
-                              : const AssetImage('assets/images/person.png'),
-                          fit: BoxFit.cover,
+                    SizedBox.square(
+                      dimension: 80.0,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: item.img.isNotEmpty
+                                ? FileImage(File(item.img))
+                                : const AssetImage('assets/images/person.png'),
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),
@@ -95,18 +98,18 @@ class _HomePageState extends State<HomePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            contacts[index].name,
+                            item.name,
                             style: const TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           Text(
-                            contacts[index].email,
+                            item.email,
                             style: const TextStyle(fontSize: 16),
                           ),
                           Text(
-                            contacts[index].phone,
+                            item.phone,
                             style: const TextStyle(fontSize: 18),
                           ),
                         ],
