@@ -42,8 +42,8 @@ class ContactHelper {
 
   Future<Contact> saveContact(Contact contact) async {
     var dbContact = await db;
-    contact.id = await dbContact.insert(contactTable, contact.toMap());
-    return contact;
+    final newContact = await dbContact.insert(contactTable, contact.toMap());
+    return contact.copyWith(id: newContact);
   }
 
   Future<Contact?> getContact(int id) async {
@@ -102,11 +102,11 @@ class Contact {
     required this.img,
   });
 
-  int id;
-  String name;
-  String email;
-  String phone;
-  String img;
+  final int id;
+  final String name;
+  final String email;
+  final String phone;
+  final String img;
 
   factory Contact.fromMap(Map map) {
     return Contact(
@@ -153,5 +153,21 @@ class Contact {
         email.hashCode ^
         phone.hashCode ^
         img.hashCode;
+  }
+
+  Contact copyWith({
+    int? id,
+    String? name,
+    String? email,
+    String? phone,
+    String? img,
+  }) {
+    return Contact(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      phone: phone ?? this.phone,
+      img: img ?? this.img,
+    );
   }
 }

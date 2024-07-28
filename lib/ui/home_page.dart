@@ -1,10 +1,16 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
-import '../helpers/contact_helper.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+
+import 'package:contacts/helpers/contact_helper.dart';
+
 import 'contact_page.dart';
 
-enum OrderOptions { orderaz, orderza }
+enum OrderOptions {
+  aToZ,
+  zToA,
+}
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -40,11 +46,11 @@ class _HomePageState extends State<HomePage> {
             iconColor: Colors.white,
             itemBuilder: (context) => <PopupMenuEntry<OrderOptions>>[
               const PopupMenuItem<OrderOptions>(
-                value: OrderOptions.orderaz,
+                value: OrderOptions.aToZ,
                 child: Text('Ordenar de A-Z'),
               ),
               const PopupMenuItem<OrderOptions>(
-                value: OrderOptions.orderza,
+                value: OrderOptions.zToA,
                 child: Text('Ordenar de Z-A'),
               ),
             ],
@@ -141,8 +147,8 @@ class _HomePageState extends State<HomePage> {
                         style: TextStyle(color: Colors.red, fontSize: 20.0),
                       ),
                       onPressed: () {
-                        // launchUrl(Uri.encodeFull('tel: ${contacts[index].phone}'));
-                        launch('tel: ${contacts[index].phone}');
+                        // launch('tel: ${contacts[index].phone}');
+                        launchUrlString('tel: ${contacts[index].phone}');
                         Navigator.pop(context);
                       },
                     ),
@@ -206,16 +212,14 @@ class _HomePageState extends State<HomePage> {
 
   void _orderList(OrderOptions result) {
     switch (result) {
-      case OrderOptions.orderaz:
+      case OrderOptions.aToZ:
         contacts.sort((a, b) {
           return a.name.toLowerCase().compareTo(b.name.toLowerCase());
         });
-        break;
-      case OrderOptions.orderza:
+      case OrderOptions.zToA:
         contacts.sort((a, b) {
           return b.name.toLowerCase().compareTo(a.name.toLowerCase());
         });
-        break;
     }
     setState(() {});
   }
