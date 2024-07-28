@@ -32,31 +32,12 @@ class ContactHelper {
     return await openDatabase(path, version: 1,
         onCreate: (db, newerVersion) async {
       await db.execute('CREATE TABLE $contactTable('
-          '$idColumn INTEGER PRIMARY KEY,'
+          '$idColumn INTEGER PRIMARY KEY AUTOINCREMENT,'
           '$nameColumn TEXT,'
           '$emailColumn TEXT,'
           '$phoneColumn TEXT,'
           '$imgColumn TEXT)');
     });
-  }
-
-  Future<Contact> saveContact(Contact contact) async {
-    var dbContact = await db;
-    final newContact = await dbContact.insert(contactTable, contact.toMap());
-    return contact.copyWith(id: newContact);
-  }
-
-  Future<Contact?> getContact(int id) async {
-    var dbContact = await db;
-    List<Map> maps = await dbContact.query(contactTable,
-        columns: [idColumn, nameColumn, emailColumn, phoneColumn, imgColumn],
-        where: '$idColumn = ?',
-        whereArgs: [id]);
-    if (maps.isNotEmpty) {
-      return Contact.fromMap(maps.first);
-    } else {
-      return null;
-    }
   }
 
   Future<int> deleteContact(int id) async {
@@ -69,9 +50,10 @@ class ContactHelper {
 
   Future<int> updateOrCreateContact(Contact contact) async {
     var dbContact = await db;
+
     final result = await dbContact.insert(
       contactTable,
-      contact.toMap(),
+      contact.toMap(includeId: false),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
 
@@ -126,14 +108,18 @@ class Contact {
     );
   }
 
-  Map<String, dynamic> toMap() {
-    var map = <String, dynamic>{
+  Map<String, dynamic> toMap({bool includeId = true}) {
+    final map = <String, dynamic>{
       nameColumn: name,
       emailColumn: email,
       phoneColumn: phone,
-      imgColumn: img
+      imgColumn: img,
     };
-    map[idColumn] = id;
+
+    if (includeId) {
+      map[idColumn] = id;
+    }
+
     return map;
   }
 

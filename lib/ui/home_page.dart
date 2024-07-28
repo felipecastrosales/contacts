@@ -129,32 +129,39 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _showOptions(BuildContext context, int index) {
+    final phone = contacts[index].phone;
+
     showModalBottomSheet(
       context: context,
       builder: (context) {
         return BottomSheet(
           onClosing: () {},
           builder: (context) {
-            return Container(
+            return Padding(
               padding: const EdgeInsets.all(10.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: TextButton(
-                      child: const Text(
-                        'Ligar',
-                        style: TextStyle(color: Colors.red, fontSize: 20.0),
+                  if (phone.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextButton(
+                        child: const Text(
+                          'Ligar',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 20.0,
+                          ),
+                        ),
+                        onPressed: () {
+                          launchUrlString('tel:$phone');
+                          Navigator.pop(context);
+                        },
                       ),
-                      onPressed: () {
-                        launchUrlString('tel: ${contacts[index].phone}');
-                        Navigator.pop(context);
-                      },
                     ),
-                  ),
                   Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: TextButton(
                       child: const Text(
                         'Editar',
@@ -167,7 +174,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.all(8),
                     child: TextButton(
                       child: const Text(
                         'Excluir',
@@ -175,6 +182,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       onPressed: () {
                         helper.deleteContact(contacts[index].id);
+
                         setState(() {
                           contacts.removeAt(index);
                           Navigator.pop(context);
@@ -194,8 +202,13 @@ class _HomePageState extends State<HomePage> {
   void _showContactPage({
     Contact? contact,
   }) async {
-    final Contact? recContact = await Navigator.push(context,
-        MaterialPageRoute(builder: (context) => ContactPage(contact: contact)));
+    final Contact? recContact = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ContactPage(contact: contact),
+      ),
+    );
+
     if (recContact != null) {
       await helper.updateOrCreateContact(recContact);
       _getAllContacts();
