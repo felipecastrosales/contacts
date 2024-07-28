@@ -191,19 +191,18 @@ class _HomePageState extends State<HomePage> {
   void _showContactPage({
     Contact? contact,
   }) async {
-    final recContact = await Navigator.push(context,
+    final Contact? recContact = await Navigator.push(context,
         MaterialPageRoute(builder: (context) => ContactPage(contact: contact)));
     if (recContact != null) {
-      await helper.updateContact(recContact);
+      await helper.updateOrCreateContact(recContact);
       _getAllContacts();
     }
   }
 
-  void _getAllContacts() {
-    helper.getAllContacts().then((list) {
-      setState(() {
-        contacts = list as List<Contact>;
-      });
+  Future<void> _getAllContacts() async {
+    final list = await helper.getAllContacts();
+    setState(() {
+      contacts = list as List<Contact>;
     });
   }
 
