@@ -69,61 +69,59 @@ class _HomePageState extends State<HomePage> {
       body: ListView.builder(
         padding: const EdgeInsets.all(10.0),
         itemCount: contacts.length,
-        itemBuilder: _contactCard,
-      ),
-    );
-  }
-
-  Widget _contactCard(BuildContext context, int index) {
-    return GestureDetector(
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Row(
-            children: <Widget>[
-              Container(
-                width: 80.0,
-                height: 80.0,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                    image: contacts[index].img != null
-                        ? FileImage(File(contacts[index].img))
-                        : const AssetImage('assets/images/person.png'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
                   children: <Widget>[
-                    Text(
-                      contacts[index].name,
-                      style: const TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
+                    Container(
+                      width: 80.0,
+                      height: 80.0,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: contacts[index].img != null
+                              ? FileImage(File(contacts[index].img))
+                              : const AssetImage('assets/images/person.png'),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
-                    Text(
-                      contacts[index].email,
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                    Text(
-                      contacts[index].phone,
-                      style: const TextStyle(fontSize: 18),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            contacts[index].name,
+                            style: const TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            contacts[index].email,
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                          Text(
+                            contacts[index].phone,
+                            style: const TextStyle(fontSize: 18),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
               ),
-            ],
-          ),
-        ),
+            ),
+            onTap: () {
+              _showOptions(context, index);
+            },
+          );
+        },
       ),
-      onTap: () {
-        _showOptions(context, index);
-      },
     );
   }
 
@@ -147,7 +145,6 @@ class _HomePageState extends State<HomePage> {
                         style: TextStyle(color: Colors.red, fontSize: 20.0),
                       ),
                       onPressed: () {
-                        // launch('tel: ${contacts[index].phone}');
                         launchUrlString('tel: ${contacts[index].phone}');
                         Navigator.pop(context);
                       },
