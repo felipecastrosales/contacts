@@ -61,9 +61,6 @@ class _ContactPageState extends State<ContactPage> {
       phoneController,
     ].any((c) => c.text.isNotEmpty);
 
-    debugPrint(
-        'hasEdit: $hasEdit | _editedContact?.img: ${_editedContact.img} | _editedContact: $_editedContact');
-
     return PopScope(
       onPopInvoked: (onPopInvoked) {
         if (onPopInvoked && !hasEdit) {
@@ -107,16 +104,18 @@ class _ContactPageState extends State<ContactPage> {
           child: Column(
             children: <Widget>[
               GestureDetector(
-                child: Container(
+                child: SizedBox(
                   width: 150,
                   height: 150,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: _editedContact.img.isNotEmpty
-                          ? FileImage(File(_editedContact.img))
-                          : const AssetImage('assets/images/person.png'),
-                      fit: BoxFit.cover,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: _editedContact.img.isNotEmpty
+                            ? FileImage(File(_editedContact.img))
+                            : const AssetImage('assets/images/person.png'),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),

@@ -27,8 +27,8 @@ class ContactHelper {
 
   Future<Database> initDb() async {
     final databasesPath = await getDatabasesPath();
-    // final path = join(databasesPath, 'contactsnew.db');
     final path = '$databasesPath/contactsnew.db';
+
     return await openDatabase(path, version: 1,
         onCreate: (db, newerVersion) async {
       await db.execute('CREATE TABLE $contactTable('
@@ -61,14 +61,21 @@ class ContactHelper {
 
   Future<int> deleteContact(int id) async {
     var dbContact = await db;
-    return await dbContact
+    final result = await dbContact
         .delete(contactTable, where: '$idColumn = ?', whereArgs: [id]);
+
+    return result;
   }
 
-  Future<int> updateContact(Contact contact) async {
+  Future<int> updateOrCreateContact(Contact contact) async {
     var dbContact = await db;
-    return await dbContact.update(contactTable, contact.toMap(),
-        where: '$idColumn = ?', whereArgs: [contact.id]);
+    final result = await dbContact.insert(
+      contactTable,
+      contact.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+
+    return result;
   }
 
   Future<List> getAllContacts() async {
@@ -78,6 +85,7 @@ class ContactHelper {
     for (Map m in listMap) {
       listContact.add(Contact.fromMap(m));
     }
+
     return listContact;
   }
 
