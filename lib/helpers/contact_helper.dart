@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:contacts/ui/home_page.dart';
 import 'package:sqflite/sqflite.dart';
 
 const String contactTable = 'contactTable';
@@ -60,10 +61,18 @@ class ContactHelper {
     return result;
   }
 
-  Future<List> getAllContacts() async {
+  Future<List> getAllContacts(
+    OrderOptions order,
+  ) async {
     var dbContact = await db;
-    List listMap = await dbContact.rawQuery('SELECT * FROM $contactTable');
+    final orderBy = order == OrderOptions.aToZ ? 'ASC' : 'DESC';
+
+    List listMap = await dbContact.rawQuery(
+      'SELECT * FROM $contactTable ORDER BY TRIM($nameColumn) $orderBy',
+    );
+
     var listContact = <Contact>[];
+
     for (Map m in listMap) {
       listContact.add(Contact.fromMap(m));
     }

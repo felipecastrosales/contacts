@@ -22,11 +22,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   ContactHelper helper = ContactHelper();
   List<Contact> contacts = [];
+  OrderOptions orderOptions = OrderOptions.aToZ;
 
   @override
   void initState() {
     super.initState();
-    _getAllContacts();
+    _getAllContacts(orderOptions);
   }
 
   @override
@@ -54,14 +55,19 @@ class _HomePageState extends State<HomePage> {
                 child: Text('Ordenar de Z-A'),
               ),
             ],
-            onSelected: _orderList,
+            onSelected: (OrderOptions result) {
+              setState(() {
+                orderOptions = result;
+                _getAllContacts(orderOptions);
+              });
+            },
           ),
         ],
       ),
       backgroundColor: Colors.white,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _showContactPage();
+          _showContactPage(order: orderOptions);
         },
         backgroundColor: Colors.red,
         child: const Icon(Icons.add),
@@ -169,7 +175,10 @@ class _HomePageState extends State<HomePage> {
                       ),
                       onPressed: () {
                         Navigator.pop(context);
-                        _showContactPage(contact: contacts[index]);
+                        _showContactPage(
+                          contact: contacts[index],
+                          order: orderOptions,
+                        );
                       },
                     ),
                   ),
@@ -201,6 +210,7 @@ class _HomePageState extends State<HomePage> {
 
   void _showContactPage({
     Contact? contact,
+    required OrderOptions order,
   }) async {
     final Contact? recContact = await Navigator.push(
       context,
@@ -211,28 +221,16 @@ class _HomePageState extends State<HomePage> {
 
     if (recContact != null) {
       await helper.updateOrCreateContact(recContact);
-      _getAllContacts();
+      _getAllContacts(order);
     }
   }
 
-  Future<void> _getAllContacts() async {
-    final list = await helper.getAllContacts();
+  Future<void> _getAllContacts(
+    OrderOptions order,
+  ) async {
+    final list = await helper.getAllContacts(order);
     setState(() {
       contacts = list as List<Contact>;
     });
-  }
-
-  void _orderList(OrderOptions result) {
-    switch (result) {
-      case OrderOptions.aToZ:
-        contacts.sort((a, b) {
-          return a.name.toLowerCase().compareTo(b.name.toLowerCase());
-        });
-      case OrderOptions.zToA:
-        contacts.sort((a, b) {
-          return b.name.toLowerCase().compareTo(a.name.toLowerCase());
-        });
-    }
-    setState(() {});
   }
 }
