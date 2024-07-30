@@ -35,13 +35,7 @@ class _ContactPageState extends State<ContactPage> {
       isEditMode = true;
       _editedContact = Contact.fromMap(contact!.toMap());
     } else {
-      _editedContact = Contact(
-        id: 0,
-        name: '',
-        email: '',
-        phone: '',
-        img: '',
-      );
+      _editedContact = Contact.empty();
     }
 
     nameController.text = _editedContact.name;

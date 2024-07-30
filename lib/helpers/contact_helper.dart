@@ -79,7 +79,7 @@ class ContactHelper {
     final orderBy = order == OrderOptions.aToZ ? 'ASC' : 'DESC';
 
     List listMap = await dbContact.rawQuery(
-      'SELECT * FROM $contactTable ORDER BY TRIM($nameColumn) $orderBy',
+      'SELECT * FROM $contactTable ORDER BY $nameColumn COLLATE NOCASE $orderBy',
     );
 
     var listContact = <Contact>[];
@@ -117,6 +117,16 @@ class Contact {
   final String email;
   final String phone;
   final String img;
+
+  factory Contact.empty() {
+    return Contact(
+      id: 0,
+      name: '',
+      email: '',
+      phone: '',
+      img: '',
+    );
+  }
 
   factory Contact.fromMap(Map map) {
     return Contact(
