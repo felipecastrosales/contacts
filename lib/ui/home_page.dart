@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage> {
         child: const Icon(Icons.add),
       ),
       body: ListView.builder(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
         itemCount: contacts.length,
         itemBuilder: (context, index) {
           final item = contacts[index];
@@ -82,28 +82,45 @@ class _HomePageState extends State<HomePage> {
             onTap: () {
               _showOptions(context, index);
             },
-            child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: <Widget>[
-                    SizedBox.square(
-                      dimension: 80.0,
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            image: item.img.isNotEmpty
-                                ? FileImage(File(item.img))
-                                : const AssetImage('assets/images/person.png'),
-                            fit: BoxFit.cover,
-                          ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 4.0,
+                horizontal: 8.0,
+              ),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey[300]!),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: <Widget>[
+                      SizedBox.square(
+                        dimension: 80.0,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(40.0),
+                          child: item.img.isNotEmpty
+                              ? Image.file(
+                                  File(item.img),
+                                  fit: BoxFit.cover,
+                                )
+                              : Icon(
+                                  Icons.person_rounded,
+                                  size: 80.0,
+                                  color: Colors.grey[700],
+                                ),
                         ),
                       ),
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Container(
+                          height: 80.0,
+                          width: 1.0,
+                          color: Colors.grey[300],
+                        ),
+                      ),
+                      Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -129,8 +146,8 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
