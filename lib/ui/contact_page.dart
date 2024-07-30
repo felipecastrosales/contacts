@@ -24,11 +24,16 @@ class _ContactPageState extends State<ContactPage> {
   final _nameFocus = FocusNode();
   late Contact _editedContact;
 
+  Contact? get contact => widget.contact;
+
+  bool isEditMode = false;
+
   @override
   void initState() {
     super.initState();
     if (widget.contact != null) {
-      _editedContact = Contact.fromMap(widget.contact!.toMap());
+      isEditMode = true;
+      _editedContact = Contact.fromMap(contact!.toMap());
     } else {
       _editedContact = Contact(
         id: 0,
@@ -55,11 +60,14 @@ class _ContactPageState extends State<ContactPage> {
 
   @override
   Widget build(BuildContext context) {
-    final hasEdit = [
+    final hasChangeOnControllers = [
       nameController,
       emailController,
       phoneController,
     ].any((c) => c.text.isNotEmpty);
+
+    final isDifferentContact = _editedContact != contact;
+    final hasEdit = isEditMode ? isDifferentContact : hasChangeOnControllers;
 
     return PopScope(
       onPopInvoked: (onPopInvoked) {

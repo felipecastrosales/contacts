@@ -101,27 +101,33 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            item.name,
-                            style: const TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              item.name,
+                              style: const TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          Text(
-                            item.email,
-                            style: const TextStyle(fontSize: 16),
-                          ),
-                          Text(
-                            item.phone,
-                            style: const TextStyle(fontSize: 18),
-                          ),
-                        ],
+                            Text(
+                              item.email,
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                            Text(
+                              item.phone,
+                              style: const TextStyle(fontSize: 18),
+                            ),
+                            Text(
+                              item.id.toString(),
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -215,7 +221,9 @@ class _HomePageState extends State<HomePage> {
     final Contact? recContact = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ContactPage(contact: contact),
+        builder: (context) => ContactPage(
+          contact: contact,
+        ),
       ),
     );
 

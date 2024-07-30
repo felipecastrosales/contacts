@@ -52,11 +52,22 @@ class ContactHelper {
   Future<int> updateOrCreateContact(Contact contact) async {
     var dbContact = await db;
 
-    final result = await dbContact.insert(
-      contactTable,
-      contact.toMap(includeId: false),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+    int result = 0;
+
+    if (contact.id == 0) {
+      result = await dbContact.insert(
+        contactTable,
+        contact.toMap(includeId: false),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    } else {
+      result = await dbContact.update(
+        contactTable,
+        contact.toMap(includeId: false),
+        where: '$idColumn = ?',
+        whereArgs: [contact.id],
+      );
+    }
 
     return result;
   }
