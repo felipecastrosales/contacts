@@ -9,9 +9,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  image_picker: ^1.1.2
+  intl_phone_number_input: ^0.7.4
   sqflite: ^2.3.3
   url_launcher: ^6.3.0
-  image_picker: ^1.1.2
 
 dev_dependencies:
   flutter_lints: ^4.0.0

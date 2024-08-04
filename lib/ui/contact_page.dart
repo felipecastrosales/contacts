@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:contacts/helpers/contact_helper.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class ContactPage extends StatefulWidget {
   const ContactPage({
@@ -23,12 +25,15 @@ class _ContactPageState extends State<ContactPage> {
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
   final _nameFocus = FocusNode();
+
   late Contact _editedContact;
 
   Contact? get contact => widget.contact;
 
   bool isEditMode = false;
   String imagePicked = '';
+  String initialCountry = 'NG';
+  PhoneNumber number = PhoneNumber(isoCode: 'BR');
 
   @override
   void initState() {
@@ -49,6 +54,7 @@ class _ContactPageState extends State<ContactPage> {
   @override
   void dispose() {
     super.dispose();
+    imagePicked = '';
     nameController.dispose();
     emailController.dispose();
     phoneController.dispose();
@@ -174,16 +180,34 @@ class _ContactPageState extends State<ContactPage> {
                 keyboardType: TextInputType.emailAddress,
               ),
               const SizedBox(height: 8),
-              TextField(
-                controller: phoneController,
-                decoration: AppInputStyle.inputDecoration('Phone', 'Phone'),
-                onChanged: (text) {
+              InternationalPhoneNumberInput(
+                onInputChanged: (PhoneNumber number) {
                   setState(() {
-                    _editedContact = _editedContact.copyWith(phone: text);
-                    phoneController.text = text;
+                    _editedContact =
+                        _editedContact.copyWith(phone: number.phoneNumber);
                   });
                 },
-                keyboardType: TextInputType.phone,
+                onSaved: (PhoneNumber number) {
+                  setState(() {
+                    _editedContact =
+                        _editedContact.copyWith(phone: number.phoneNumber);
+                  });
+                },
+                selectorConfig: const SelectorConfig(
+                  selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+                  useBottomSheetSafeArea: true,
+                ),
+                ignoreBlank: false,
+                autoValidateMode: AutovalidateMode.disabled,
+                selectorTextStyle: const TextStyle(color: Colors.black),
+                initialValue: number,
+                textFieldController: phoneController,
+                formatInput: true,
+                keyboardType: const TextInputType.numberWithOptions(
+                  signed: true,
+                  decimal: true,
+                ),
+                inputBorder: const OutlineInputBorder(),
               ),
             ],
           ),

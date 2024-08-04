@@ -154,10 +154,6 @@ class _HomePageState extends State<HomePage> {
                                     item.phone,
                                     style: const TextStyle(fontSize: 18),
                                   ),
-                                  Text(
-                                    item.id.toString(),
-                                    style: const TextStyle(fontSize: 16),
-                                  ),
                                 ],
                               ),
                             ),

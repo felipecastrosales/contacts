@@ -10,6 +10,10 @@ void main() {
       theme: ThemeData(
         primaryColor: Colors.red,
         dialogBackgroundColor: Colors.white,
+        bottomSheetTheme: const BottomSheetThemeData(
+          backgroundColor: Colors.white,
+          surfaceTintColor: Colors.white,
+        ),
         colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.red),
         textButtonTheme: TextButtonThemeData(
           style: ButtonStyle(
