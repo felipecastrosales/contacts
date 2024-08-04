@@ -1,117 +1,213 @@
-import 'dart:async';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
-import '../helpers/contact_helper.dart';
+
+import 'package:contacts/helpers/contact_helper.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class ContactPage extends StatefulWidget {
-  final Contact contact;
-  ContactPage({this.contact});
+  const ContactPage({
+    super.key,
+    this.contact,
+  });
+
+  final Contact? contact;
 
   @override
-  _ContactPageState createState() => _ContactPageState();
+  State<ContactPage> createState() => _ContactPageState();
 }
 
 class _ContactPageState extends State<ContactPage> {
-  final _nameController  = TextEditingController();
-  final _emailController = TextEditingController();
-  final _phoneController = TextEditingController();
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final phoneController = TextEditingController();
   final _nameFocus = FocusNode();
-  bool _userEdited = false;
-  Contact _editedContact;
+
+  late Contact _editedContact;
+
+  Contact? get contact => widget.contact;
+
+  bool isEditMode = false;
+  String imagePicked = '';
+  String initialCountry = 'NG';
+  PhoneNumber number = PhoneNumber(isoCode: 'BR');
 
   @override
   void initState() {
     super.initState();
-    if (widget.contact == null) {
-      _editedContact = Contact();
+    if (widget.contact != null) {
+      isEditMode = true;
+      _editedContact = Contact.fromMap(contact!.toMap());
+      imagePicked = _editedContact.img;
     } else {
-      _editedContact = Contact.fromMap(widget.contact.toMap());
+      _editedContact = Contact.empty();
     }
 
-    _nameController.text  = _editedContact.name;
-    _emailController.text = _editedContact.email;
-    _phoneController.text = _editedContact.phone;
+    nameController.text = _editedContact.name;
+    emailController.text = _editedContact.email;
+    phoneController.text = _editedContact.phone;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    imagePicked = '';
+    nameController.dispose();
+    emailController.dispose();
+    phoneController.dispose();
+    _nameFocus.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _requestPop,
+    final hasChangeOnControllers = [
+          nameController,
+          emailController,
+          phoneController,
+        ].any((c) => c.text.isNotEmpty) ||
+        imagePicked.isNotEmpty;
+
+    final isDifferentContact = _editedContact != contact;
+    final hasEdit = isEditMode ? isDifferentContact : hasChangeOnControllers;
+
+    return PopScope(
+      onPopInvoked: (onPopInvoked) {
+        if (onPopInvoked && !hasEdit) {
+          _requestPop(hasEdit);
+        }
+      },
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text(_editedContact.name ?? 'Adicionar Contato'),
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              _requestPop(hasEdit);
+            },
+          ),
+          title: Text(
+            _editedContact.name.isNotEmpty
+                ? _editedContact.name
+                : 'New Contact',
+            style: const TextStyle(color: Colors.white),
+          ),
           backgroundColor: Colors.red,
-          centerTitle: true
+          centerTitle: true,
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            if (_editedContact.name != null && _editedContact.name.isNotEmpty) {
+            if (_editedContact.name.isNotEmpty) {
               Navigator.pop(context, _editedContact);
             } else {
               FocusScope.of(context).requestFocus(_nameFocus);
             }
           },
-          child: Icon(Icons.add),
           backgroundColor: Colors.red,
+          child: const Icon(Icons.add),
         ),
         body: SingleChildScrollView(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: Column(
             children: <Widget>[
+              const SizedBox(height: 24),
               GestureDetector(
-                child: Container(
-                  width: 150,
-                  height: 150,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: _editedContact.img != null
-                        ? FileImage(File(_editedContact.img))
-                        : AssetImage('assets/images/person.png'),
-                      fit: BoxFit.cover,
+                child: SizedBox.square(
+                  dimension: 120,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(100),
+                    child: ColoredBox(
+                      color: Colors.grey[300]!,
+                      child: _editedContact.img.isNotEmpty
+                          ? Image.file(
+                              File(_editedContact.img),
+                              fit: BoxFit.cover,
+                            )
+                          : Icon(
+                              Icons.add_a_photo,
+                              size: 60,
+                              color: Colors.grey[700],
+                            ),
                     ),
                   ),
                 ),
                 onTap: () async {
-                  await ImagePicker()
-                    .getImage(source: ImageSource.gallery)
-                    .then((file) {
-                  if (file == null) return;
+                  try {
+                    final file = await ImagePicker().pickImage(
+                      source: ImageSource.gallery,
+                    );
+
+                    if (file == null) {
+                      return;
+                    }
+
                     setState(() {
-                      _editedContact.img = file.path;
+                      imagePicked = file.path;
+                      _editedContact = _editedContact.copyWith(img: file.path);
                     });
-                  });
+                  } catch (e) {
+                    debugPrint('Error on pick image: $e');
+                  }
                 },
               ),
+              const SizedBox(height: 24),
               TextField(
-                controller: _nameController,
+                controller: nameController,
                 focusNode: _nameFocus,
-                decoration: InputDecoration(labelText: 'Nome'),
+                decoration: AppInputStyle.inputDecoration('Name', 'Name'),
                 onChanged: (text) {
-                  _userEdited = true;
                   setState(() {
-                    _editedContact.name = text;
+                    _editedContact = _editedContact.copyWith(name: text);
+                    nameController.text = text;
                   });
                 },
               ),
+              const SizedBox(height: 8),
               TextField(
-                controller: _emailController,
-                decoration: InputDecoration(labelText: 'Email'),
+                controller: emailController,
+                decoration: AppInputStyle.inputDecoration('Email', 'Email'),
                 onChanged: (text) {
-                  _userEdited = true;
-                  _editedContact.email = text;
+                  setState(() {
+                    _editedContact = _editedContact.copyWith(email: text);
+                    emailController.text = text;
+                  });
                 },
                 keyboardType: TextInputType.emailAddress,
               ),
-              TextField(
-                controller: _phoneController,
-                decoration: InputDecoration(labelText: 'Telefone'),
-                onChanged: (text) {
-                  _userEdited = true;
-                  _editedContact.phone = text;
+              const SizedBox(height: 8),
+              InternationalPhoneNumberInput(
+                onInputChanged: (PhoneNumber number) {
+                  setState(() {
+                    _editedContact =
+                        _editedContact.copyWith(phone: number.phoneNumber);
+                  });
                 },
-                keyboardType: TextInputType.phone,
+                onSaved: (PhoneNumber number) {
+                  setState(() {
+                    _editedContact =
+                        _editedContact.copyWith(phone: number.phoneNumber);
+                  });
+                },
+                selectorConfig: const SelectorConfig(
+                  selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+                  useBottomSheetSafeArea: true,
+                ),
+                ignoreBlank: false,
+                autoValidateMode: AutovalidateMode.disabled,
+                selectorTextStyle: const TextStyle(color: Colors.black),
+                initialValue: number,
+                textFieldController: phoneController,
+                formatInput: true,
+                keyboardType: const TextInputType.numberWithOptions(
+                  signed: true,
+                  decimal: true,
+                ),
+                inputBorder: const OutlineInputBorder(),
               ),
             ],
           ),
@@ -120,23 +216,24 @@ class _ContactPageState extends State<ContactPage> {
     );
   }
 
-  Future<bool> _requestPop() {
-    if (_userEdited) {
+  void _requestPop(bool hasEdit) {
+    if (hasEdit) {
       showDialog(
         context: context,
+        useRootNavigator: false,
         builder: (context) {
           return AlertDialog(
-            title: Text('Descartar alterações?'),
-            content: Text('Se você sair, as alterações serão perdidas.'),
+            title: const Text('Discard changes?'),
+            content: const Text('If you leave, your changes will be lost.'),
             actions: <Widget>[
               TextButton(
-                child: Text('Cancelar'),
+                child: const Text('Cancel'),
                 onPressed: () {
                   Navigator.pop(context);
                 },
               ),
               TextButton(
-                child: Text('Sim'),
+                child: const Text('Yes'),
                 onPressed: () {
                   Navigator.pop(context);
                   Navigator.pop(context);
@@ -144,11 +241,60 @@ class _ContactPageState extends State<ContactPage> {
               ),
             ],
           );
-        }
+        },
       );
-      return Future.value(false);
-    } else {
-      return Future.value(true);
+      return;
     }
+
+    Navigator.of(context).maybePop();
   }
+}
+
+class AppInputStyle {
+  static inputDecoration(
+    String labelText,
+    String hintText,
+  ) =>
+      InputDecoration(
+        labelText: labelText,
+        fillColor: Colors.white,
+        focusedBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(4)),
+          borderSide: BorderSide(width: 1, color: Colors.blue),
+        ),
+        disabledBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(4)),
+          borderSide: BorderSide(width: 1, color: Colors.orange),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: const BorderRadius.all(Radius.circular(4)),
+          borderSide: BorderSide(width: 1, color: Colors.grey[300]!),
+        ),
+        border: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(4)),
+          borderSide: BorderSide(
+            width: 1,
+          ),
+        ),
+        errorBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(4),
+          ),
+          borderSide: BorderSide(width: 1, color: Colors.black),
+        ),
+        focusedErrorBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(4)),
+          borderSide: BorderSide(
+            width: 1,
+            color: Colors.yellowAccent,
+          ),
+        ),
+        hintText: hintText,
+        hintStyle: const TextStyle(
+          fontSize: 16,
+          color: Color(
+            0xFFB3B1B1,
+          ),
+        ),
+      );
 }

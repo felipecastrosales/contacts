@@ -1,7 +1,3 @@
- <p align="center">
-      <img src="https://image.flaticon.com/icons/png/512/88/88271.png" width="90px" alt="Image FlatIcon"/>
-</p>
-
 <h1 align="center">Contacts</h1>
 
    <h2 align="center">Topics 📋</h2>
@@ -10,7 +6,6 @@
    
    - [About 📖](#about-)
    - [Preview 📱](#preview-)
-   - [Challenges and Learnings along the way 🤯](#challenges-and-learnings-along-the-way-)
    - [How to Use 🤔](#how-to-use-)
    - [How to Contribute 💪](#how-to-contribute-)
    - [License 📝](#license-)
@@ -21,29 +16,14 @@
    
 <p align="center">   
    A Contact Book made with Flutter. 💙<br>
-   A Contact Application, using <a href="https://pub.dev/packages/sqflite">sqflite</a>, a packpage from Flutter. Where you can create, consult, edit and delete, also organize them from A-Z, or from Z-A, put photos (from gallery) and email in your contacts.<br>
-   This application is in version 1.2.
+   A Contact Application, using <a href="https://pub.dev/packages/sqflite">sqflite</a>, a package from Flutter. Where you can create, consult, edit and delete, also organize them from A-Z, or from Z-A, put photos (from gallery), email in your contacts and phone number. 📱<br>
 </p>
 
 ---
 
 <h2 align="center">Preview 📱</h2><br>
 
-   <p align="center">
-      <img src="assets/demos/contactsdemo1.gif">
-   </p>
-   
-   > * See all in [`demo`](https://github.com/felipecastrosales/Contacts/tree/master/assets/demos) folder. 🧐📂
-
----
-
-<h2 align="center">Challenges and Learnings along the way 🤯</h2>
-
-   <p>
-      In this application, which is a little more complex, I learned and also reinforced many previous lessons.<br>
-      I used new widgets, resources and this example of CRUD (Create, Read, Update and Delete), made me learn a lot, it will certainly be a learning experience that I will take with me in all the technologies that I will learn. <br>
-      In this project I also used the SQLite database, with the Flutter plugin, the <a href="https://flutter.dev/docs/cookbook/persistence/sqlite"> sqflite</a>, which will help insert, query, update and delete queries.
-   </p>
+https://github.com/user-attachments/assets/a2783204-6edc-4d92-8ac9-3cd41cfa4480
 
 ---
 
