@@ -106,19 +106,23 @@ class _ContactPageState extends State<ContactPage> {
           child: Column(
             children: <Widget>[
               GestureDetector(
-                child: SizedBox(
-                  width: 150,
-                  height: 150,
+                child: SizedBox.square(
+                  dimension: 120,
                   child: DecoratedBox(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: _editedContact.img.isNotEmpty
-                            ? FileImage(File(_editedContact.img))
-                            : const AssetImage('assets/images/person.png'),
-                        fit: BoxFit.cover,
-                      ),
+                      color: Colors.grey[300],
                     ),
+                    child: _editedContact.img.isNotEmpty
+                        ? Image.file(
+                            File(_editedContact.img),
+                            fit: BoxFit.cover,
+                          )
+                        : Icon(
+                            Icons.add_a_photo,
+                            size: 60,
+                            color: Colors.grey[700],
+                          ),
                   ),
                 ),
                 onTap: () async {
