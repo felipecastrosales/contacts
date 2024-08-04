@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:contacts/helpers/contact_helper.dart';
@@ -27,6 +28,7 @@ class _ContactPageState extends State<ContactPage> {
   Contact? get contact => widget.contact;
 
   bool isEditMode = false;
+  String imagePicked = '';
 
   @override
   void initState() {
@@ -34,6 +36,7 @@ class _ContactPageState extends State<ContactPage> {
     if (widget.contact != null) {
       isEditMode = true;
       _editedContact = Contact.fromMap(contact!.toMap());
+      imagePicked = _editedContact.img;
     } else {
       _editedContact = Contact.empty();
     }
@@ -55,10 +58,11 @@ class _ContactPageState extends State<ContactPage> {
   @override
   Widget build(BuildContext context) {
     final hasChangeOnControllers = [
-      nameController,
-      emailController,
-      phoneController,
-    ].any((c) => c.text.isNotEmpty);
+          nameController,
+          emailController,
+          phoneController,
+        ].any((c) => c.text.isNotEmpty) ||
+        imagePicked.isNotEmpty;
 
     final isDifferentContact = _editedContact != contact;
     final hasEdit = isEditMode ? isDifferentContact : hasChangeOnControllers;
@@ -84,7 +88,7 @@ class _ContactPageState extends State<ContactPage> {
           title: Text(
             _editedContact.name.isNotEmpty
                 ? _editedContact.name
-                : 'Adicionar Contato',
+                : 'New Contact',
             style: const TextStyle(color: Colors.white),
           ),
           backgroundColor: Colors.red,
@@ -105,44 +109,51 @@ class _ContactPageState extends State<ContactPage> {
           padding: const EdgeInsets.all(10),
           child: Column(
             children: <Widget>[
+              const SizedBox(height: 24),
               GestureDetector(
                 child: SizedBox.square(
                   dimension: 120,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.grey[300],
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(100),
+                    child: ColoredBox(
+                      color: Colors.grey[300]!,
+                      child: _editedContact.img.isNotEmpty
+                          ? Image.file(
+                              File(_editedContact.img),
+                              fit: BoxFit.cover,
+                            )
+                          : Icon(
+                              Icons.add_a_photo,
+                              size: 60,
+                              color: Colors.grey[700],
+                            ),
                     ),
-                    child: _editedContact.img.isNotEmpty
-                        ? Image.file(
-                            File(_editedContact.img),
-                            fit: BoxFit.cover,
-                          )
-                        : Icon(
-                            Icons.add_a_photo,
-                            size: 60,
-                            color: Colors.grey[700],
-                          ),
                   ),
                 ),
                 onTap: () async {
-                  final file = await ImagePicker().pickImage(
-                    source: ImageSource.gallery,
-                  );
+                  try {
+                    final file = await ImagePicker().pickImage(
+                      source: ImageSource.gallery,
+                    );
 
-                  if (file == null) {
-                    return;
+                    if (file == null) {
+                      return;
+                    }
+
+                    setState(() {
+                      imagePicked = file.path;
+                      _editedContact = _editedContact.copyWith(img: file.path);
+                    });
+                  } catch (e) {
+                    debugPrint('Error on pick image: $e');
                   }
-
-                  setState(() {
-                    _editedContact = _editedContact.copyWith(img: file.path);
-                  });
                 },
               ),
+              const SizedBox(height: 24),
               TextField(
                 controller: nameController,
                 focusNode: _nameFocus,
-                decoration: const InputDecoration(labelText: 'Nome'),
+                decoration: AppInputStyle.inputDecoration('Name', 'Name'),
                 onChanged: (text) {
                   setState(() {
                     _editedContact = _editedContact.copyWith(name: text);
@@ -150,9 +161,10 @@ class _ContactPageState extends State<ContactPage> {
                   });
                 },
               ),
+              const SizedBox(height: 8),
               TextField(
                 controller: emailController,
-                decoration: const InputDecoration(labelText: 'Email'),
+                decoration: AppInputStyle.inputDecoration('Email', 'Email'),
                 onChanged: (text) {
                   setState(() {
                     _editedContact = _editedContact.copyWith(email: text);
@@ -161,9 +173,10 @@ class _ContactPageState extends State<ContactPage> {
                 },
                 keyboardType: TextInputType.emailAddress,
               ),
+              const SizedBox(height: 8),
               TextField(
                 controller: phoneController,
-                decoration: const InputDecoration(labelText: 'Telefone'),
+                decoration: AppInputStyle.inputDecoration('Phone', 'Phone'),
                 onChanged: (text) {
                   setState(() {
                     _editedContact = _editedContact.copyWith(phone: text);
@@ -186,17 +199,17 @@ class _ContactPageState extends State<ContactPage> {
         useRootNavigator: false,
         builder: (context) {
           return AlertDialog(
-            title: const Text('Descartar alterações?'),
-            content: const Text('Se você sair, as alterações serão perdidas.'),
+            title: const Text('Discard changes?'),
+            content: const Text('If you leave, your changes will be lost.'),
             actions: <Widget>[
               TextButton(
-                child: const Text('Cancelar'),
+                child: const Text('Cancel'),
                 onPressed: () {
                   Navigator.pop(context);
                 },
               ),
               TextButton(
-                child: const Text('Sim'),
+                child: const Text('Yes'),
                 onPressed: () {
                   Navigator.pop(context);
                   Navigator.pop(context);
@@ -211,4 +224,53 @@ class _ContactPageState extends State<ContactPage> {
 
     Navigator.of(context).maybePop();
   }
+}
+
+class AppInputStyle {
+  static inputDecoration(
+    String labelText,
+    String hintText,
+  ) =>
+      InputDecoration(
+        labelText: labelText,
+        fillColor: Colors.white,
+        focusedBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(4)),
+          borderSide: BorderSide(width: 1, color: Colors.blue),
+        ),
+        disabledBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(4)),
+          borderSide: BorderSide(width: 1, color: Colors.orange),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: const BorderRadius.all(Radius.circular(4)),
+          borderSide: BorderSide(width: 1, color: Colors.grey[300]!),
+        ),
+        border: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(4)),
+          borderSide: BorderSide(
+            width: 1,
+          ),
+        ),
+        errorBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(4),
+          ),
+          borderSide: BorderSide(width: 1, color: Colors.black),
+        ),
+        focusedErrorBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(4)),
+          borderSide: BorderSide(
+            width: 1,
+            color: Colors.yellowAccent,
+          ),
+        ),
+        hintText: hintText,
+        hintStyle: const TextStyle(
+          fontSize: 16,
+          color: Color(
+            0xFFB3B1B1,
+          ),
+        ),
+      );
 }

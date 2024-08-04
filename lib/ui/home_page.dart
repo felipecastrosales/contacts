@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Contatos',
+          'Contacts',
           style: TextStyle(
             color: Colors.white,
           ),
@@ -48,11 +48,11 @@ class _HomePageState extends State<HomePage> {
             itemBuilder: (context) => <PopupMenuEntry<OrderOptions>>[
               const PopupMenuItem<OrderOptions>(
                 value: OrderOptions.aToZ,
-                child: Text('Ordenar de A-Z'),
+                child: Text('Order from A-Z'),
               ),
               const PopupMenuItem<OrderOptions>(
                 value: OrderOptions.zToA,
-                child: Text('Ordenar de Z-A'),
+                child: Text('Order from Z-A'),
               ),
             ],
             onSelected: (OrderOptions result) {
@@ -72,88 +72,103 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.red,
         child: const Icon(Icons.add),
       ),
-      body: ListView.builder(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        itemCount: contacts.length,
-        itemBuilder: (context, index) {
-          final item = contacts[index];
-
-          return GestureDetector(
-            onTap: () {
-              _showOptions(context, index);
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 4.0,
-                horizontal: 8.0,
-              ),
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey[300]!),
-                  borderRadius: BorderRadius.circular(8.0),
+      body: contacts.isEmpty
+          ? Center(
+              child: Padding(
+                padding: const EdgeInsets.all(32),
+                child: Text(
+                  'You don\'t have any contacts yet.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    color: Colors.grey[700],
+                  ),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: <Widget>[
-                      SizedBox.square(
-                        dimension: 80.0,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(40.0),
-                          child: item.img.isNotEmpty
-                              ? Image.file(
-                                  File(item.img),
-                                  fit: BoxFit.cover,
-                                )
-                              : Icon(
-                                  Icons.person_rounded,
-                                  size: 80.0,
-                                  color: Colors.grey[700],
-                                ),
-                        ),
+              ),
+            )
+          : ListView.builder(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              itemCount: contacts.length,
+              itemBuilder: (context, index) {
+                final item = contacts[index];
+
+                return GestureDetector(
+                  onTap: () {
+                    _showOptions(context, index);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 4.0,
+                      horizontal: 8.0,
+                    ),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey[300]!),
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Container(
-                          height: 80.0,
-                          width: 1.0,
-                          color: Colors.grey[300],
-                        ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
                           children: <Widget>[
-                            Text(
-                              item.name,
-                              style: const TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
+                            SizedBox.square(
+                              dimension: 80.0,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(40.0),
+                                child: item.img.isNotEmpty
+                                    ? Image.file(
+                                        File(item.img),
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Icon(
+                                        Icons.person_rounded,
+                                        size: 80.0,
+                                        color: Colors.grey[700],
+                                      ),
                               ),
                             ),
-                            Text(
-                              item.email,
-                              style: const TextStyle(fontSize: 16),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Container(
+                                height: 80.0,
+                                width: 1.0,
+                                color: Colors.grey[300],
+                              ),
                             ),
-                            Text(
-                              item.phone,
-                              style: const TextStyle(fontSize: 18),
-                            ),
-                            Text(
-                              item.id.toString(),
-                              style: const TextStyle(fontSize: 16),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    item.name,
+                                    style: const TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    item.email,
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                  Text(
+                                    item.phone,
+                                    style: const TextStyle(fontSize: 18),
+                                  ),
+                                  Text(
+                                    item.id.toString(),
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
+                );
+              },
             ),
-          );
-        },
-      ),
     );
   }
 
@@ -177,7 +192,7 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.symmetric(vertical: 4.0),
                       child: TextButton(
                         child: const Text(
-                          'Ligar',
+                          'Call',
                           style: TextStyle(
                             color: Colors.red,
                             fontSize: 20.0,
@@ -193,7 +208,7 @@ class _HomePageState extends State<HomePage> {
                     padding: const EdgeInsets.symmetric(vertical: 4.0),
                     child: TextButton(
                       child: const Text(
-                        'Editar',
+                        'Edit',
                         style: TextStyle(color: Colors.red, fontSize: 20.0),
                       ),
                       onPressed: () {
@@ -209,7 +224,7 @@ class _HomePageState extends State<HomePage> {
                     padding: const EdgeInsets.symmetric(vertical: 4.0),
                     child: TextButton(
                       child: const Text(
-                        'Excluir',
+                        'Delete',
                         style: TextStyle(color: Colors.red, fontSize: 20.0),
                       ),
                       onPressed: () {
